@@ -177,7 +177,7 @@ def train_network(x, y, theta, beta):
         y_hat = sigmoid(net_y)
 
         # Objective
-        j = np.sum(log_like(y, y_hat))
+        j = np.mean(log_like(y, y_hat))
         J.append(j)
 
         # Backward for theta
@@ -237,6 +237,7 @@ def test_network(x, y, theta, beta):
     :return: `float` the average
     :return: `numpy.ndarray` the confusion matrix
     """
+    J = []
     correct = 0
     size = y.shape[1]
     conf_mat = np.zeros((size, size))
@@ -245,6 +246,8 @@ def test_network(x, y, theta, beta):
     h = sigmoid(net_h)
     net_y = np.dot(h, theta)
     y_hat = sigmoid(net_y)
+    j = np.mean(log_like(y, y_hat))
+    J.append(j)
 
     for i in range(y.shape[0]):
         # gets the index where the label contains a 1. represents the subject
@@ -256,10 +259,10 @@ def test_network(x, y, theta, beta):
         if int(actual) + 2 == guess + 2:
             correct += 1
 
-    return (correct / len(y)) * 100, conf_mat
+    return (correct / len(y)) * 100, conf_mat, J
 
 
-def plot_j(J):
+def plot_j(J, fileName):
     """
     Plots the average log likelihood
 
@@ -268,7 +271,7 @@ def plot_j(J):
     plot(range(len(J)), J)
     xlabel("Iterations")
     ylabel("Average Log Likelihood")
-    savefig('log_like1.png', bbox_inches='tight')
+    savefig(fileName, bbox_inches='tight')
 
 
 def plot_conf_mat(mat):
@@ -294,13 +297,14 @@ def main():
     beta = np.random.uniform(-0.0001, 0.0001, size=(input_size, hidden_size))
     theta = np.random.uniform(-0.0001, 0.0001, size=(hidden_size, output_size))
 
-    theta, beta, J = train_network(train_X, train_labels, theta, beta)
-    test_accuracy, conf_mat = test_network(test_X, test_labels, theta, beta)
+    theta, beta, J_train = train_network(train_X, train_labels, theta, beta)
+    test_accuracy, conf_mat, J_test = test_network(test_X, test_labels, theta, beta)
 
     print("Testing Accuracy:", test_accuracy)
     print("Confusion Matrix:\n", conf_mat)
 
-    plot_j(J)
+    plot_j(J_train, "log_like_train1.png")
+    plot_j(J_test, "log_like_test1.png")
     plot_conf_mat(conf_mat)
 
 
