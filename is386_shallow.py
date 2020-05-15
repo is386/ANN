@@ -9,9 +9,9 @@ from os import listdir
 from os.path import isfile, join
 from PIL import Image
 import numpy as np
-from matplotlib.pyplot import plot, xlabel, ylabel, savefig, figure
-from seaborn import set, heatmap
-from pandas import DataFrame
+# from matplotlib.pyplot import plot, xlabel, ylabel, savefig, figure
+# from seaborn import set, heatmap
+# from pandas import DataFrame
 
 
 YALE_PATH = "./yalefaces/"
@@ -262,25 +262,25 @@ def test_network(x, y, theta, beta):
     return (correct / len(y)) * 100, conf_mat, J
 
 
-def plot_j(J, fileName):
-    """
-    Plots the average log likelihood
+# def plot_j(J, fileName):
+#     """
+#     Plots the average log likelihood
 
-    :param avg_J: `numpy.ndarray` test data
-    """
-    plot(range(len(J)), J)
-    xlabel("Iterations")
-    ylabel("Average Log Likelihood")
-    savefig(fileName, bbox_inches='tight')
+#     :param avg_J: `numpy.ndarray` test data
+#     """
+#     plot(range(len(J)), J)
+#     xlabel("Iterations")
+#     ylabel("Average Log Likelihood")
+#     savefig(fileName, bbox_inches='tight')
 
 
-def plot_conf_mat(mat):
-    df_cm = DataFrame(mat, index=[i for i in range(
-        2, 16)], columns=[i for i in range(2, 16)])
-    figure(figsize=(10, 7))
-    set(font_scale=1.2)
-    heatmap(df_cm, annot=True)
-    savefig('conf_mat1.png', bbox_inches='tight')
+# def plot_conf_mat(mat):
+#     df_cm = DataFrame(mat, index=[i for i in range(
+#         2, 16)], columns=[i for i in range(2, 16)])
+#     figure(figsize=(10, 7))
+#     set(font_scale=1.2)
+#     heatmap(df_cm, annot=True)
+#     savefig('conf_mat1.png', bbox_inches='tight')
 
 
 def main():
@@ -298,14 +298,15 @@ def main():
     theta = np.random.uniform(-0.0001, 0.0001, size=(hidden_size, output_size))
 
     theta, beta, J_train = train_network(train_X, train_labels, theta, beta)
-    test_accuracy, conf_mat, J_test = test_network(test_X, test_labels, theta, beta)
+    test_accuracy, conf_mat, J_test = test_network(
+        test_X, test_labels, theta, beta)
 
     print("Testing Accuracy:", test_accuracy)
     print("Confusion Matrix:\n", conf_mat)
 
-    plot_j(J_train, "log_like_train1.png")
-    plot_j(J_test, "log_like_test1.png")
-    plot_conf_mat(conf_mat)
+    # plot_j(J_train, "log_like_train1.png")
+    # plot_j(J_test, "log_like_test1.png")
+    # plot_conf_mat(conf_mat)
 
 
 if __name__ == "__main__":
