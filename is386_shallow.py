@@ -17,7 +17,7 @@ from pandas import DataFrame
 YALE_PATH = "./yalefaces/"
 IMAGE_X = 40
 IMAGE_Y = 40
-SEED = 11519991
+SEED = 1151999
 
 # Hyper Parameters
 LR = 0.001
