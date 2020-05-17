@@ -2,7 +2,7 @@
 # is386
 # CS615
 # HW 2
-# Question 3
+# Question 2
 
 
 from os import listdir
@@ -156,7 +156,7 @@ def beta_deriv(x, h, y, y_hat, theta, beta):
 
 def train_network(x, y, theta, beta):
     """
-    Trains the weights using batch gradient descent until the termination criteria is reached.
+    Trains the weights until the termination criteria is reached.
 
     :param x: `numpy.ndarray` the training data
     :param y: `numpy.ndarray` the training labels
@@ -233,9 +233,11 @@ def test_network(x, y, theta, beta):
 
     :param test_X: `numpy.ndarray` test data
     :param test_Y: `numpy.ndarray` test labels
-    :param weights: `numpy.ndarray` trained weights
+    :param theta: `np.ndarray` the trained hidden weights
+    :param beta: `np.ndarray` the trained input weights
     :return: `float` the average
     :return: `numpy.ndarray` the confusion matrix
+    :return: `numpy.ndarray` the avg log likelihood
     """
     J = []
     correct = 0
@@ -267,6 +269,7 @@ def test_network(x, y, theta, beta):
 #     Plots the average log likelihood
 
 #     :param avg_J: `numpy.ndarray` test data
+#     :param filename: `str` name of the image file
 #     """
 #     plot(range(len(J)), J)
 #     xlabel("Iterations")
@@ -274,13 +277,19 @@ def test_network(x, y, theta, beta):
 #     savefig(fileName, bbox_inches='tight')
 
 
-# def plot_conf_mat(mat):
+# def plot_conf_mat(mat, filename):
+#     """
+#     Plots the confusion matrix.
+
+#     :param mat: `numpy.ndarray` confusion matrix
+#     :param filename: `str` name of the image file
+#     """
 #     df_cm = DataFrame(mat, index=[i for i in range(
 #         2, 16)], columns=[i for i in range(2, 16)])
 #     figure(figsize=(10, 7))
 #     set(font_scale=1.2)
 #     heatmap(df_cm, annot=True)
-#     savefig('conf_mat1.png', bbox_inches='tight')
+#     savefig(filename, bbox_inches='tight')
 
 
 def main():
@@ -306,7 +315,7 @@ def main():
 
     # plot_j(J_train, "log_like_train1.png")
     # plot_j(J_test, "log_like_test1.png")
-    # plot_conf_mat(conf_mat)
+    # plot_conf_mat(conf_mat, "conf_mat1.png")
 
 
 if __name__ == "__main__":
