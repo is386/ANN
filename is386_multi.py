@@ -19,7 +19,7 @@ SEED = 1151999
 
 # Hyper Parameters
 LR = 0.001
-TC = 5000
+TC = 2000
 L2_RT = 0.001
 BIAS = 1
 
@@ -367,7 +367,9 @@ def main():
     weights = init_weights(input_size, output_size, h_sizes)
 
     weights, J_train = train_network(train_X, train_labels, weights)
+    train_acc = test_network(train_X, train_labels, weights)
     test_acc = test_network(test_X, test_labels, weights)
+    print("Training Accuracy:", train_acc)
     print("Testing Accuracy:", test_acc)
 
     # plot_j(J_train, "log_like_train2.png")
