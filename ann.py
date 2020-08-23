@@ -1,16 +1,10 @@
-# Indervir Singh
-# is386
-# CS615
-# HW 2
-# Question 3
-
-
 from os import listdir
 from os.path import isfile, join
 from PIL import Image
 import numpy as np
-# from matplotlib.pyplot import plot, xlabel, ylabel, savefig
-
+import matplotlib.pyplot as plt
+import seaborn as sn
+import pandas as pd
 
 YALE_PATH = "./yalefaces/"
 IMAGE_X = 40
@@ -19,7 +13,7 @@ SEED = 1151999
 
 # Hyper Parameters
 LR = 0.001
-TC = 2000
+TC = 1000
 L2_RT = 0.001
 BIAS = 1
 
@@ -273,7 +267,7 @@ def train_network(x, y, weights):
     :return: `np.ndarray` the log likelihood errors
     """
     J = []
-    for i in range(TC):
+    for _ in range(TC):
         h_vals = []
 
         # Forward for input layer
@@ -314,6 +308,7 @@ def test_network(x, y, weights):
     :return: `float` the average
     """
     correct = 0
+    confuse_mat = np.zeros((len(classes), len(classes)))
 
     # Forward for input layer
     net_h = np.dot(x, weights[0])
@@ -333,24 +328,44 @@ def test_network(x, y, weights):
         actual = np.where(y[i] == 1)[0][0]
         # gets the index where the label contains a 1. represents most likely subject
         guess = np.where(y_hat[i] == np.amax(y_hat[i]))[0][0]
+        confuse_mat[guess][actual] += 1
+
         # get the index of the position that has a max, then add 2 to get the subject number
         if int(actual) + 2 == guess + 2:
             correct += 1
 
-    return (correct / len(y)) * 100
+    return (correct / len(y)) * 100, confuse_mat
 
 
-# def plot_j(J, filename):
-#     """
-#     Plots the average log likelihood
+def plot_avg_j(avg_J):
+    """
+    Plots the average log likelihood
 
-#     :param avg_J: `numpy.ndarray` test data
-#     :param filename: `str` name of the image file
-#     """
-#     plot(range(len(J)), J)
-#     xlabel("Iterations")
-#     ylabel("Average Log Likelihood")
-#     savefig(filename, bbox_inches='tight')
+    :param avg_J: `numpy.ndarray` test data
+    """
+    plt.plot(range(len(avg_J)), avg_J)
+    plt.xlabel("Iterations")
+    plt.ylabel("Average Log Likelihood")
+    plt.savefig('log.png', bbox_inches='tight')
+    plt.close()
+
+
+def plot_confuse(confuse_mat):
+    """
+    Plots the confusion matrix
+
+    :param confuse_mat: `numpy.ndarray` confusion matrix
+    """
+    df_cm = pd.DataFrame(
+        confuse_mat,
+        index=[i for i in range(2, 16)],
+        columns=[i for i in range(2, 16)]
+    )
+    plt.figure(figsize=(10, 7))
+    sn.set(font_scale=1.2)
+    sn.heatmap(df_cm, annot=True)
+    plt.savefig('confuse.png', bbox_inches='tight')
+    plt.close()
 
 
 def main():
@@ -366,13 +381,11 @@ def main():
     output_size = train_labels.shape[1]
     weights = init_weights(input_size, output_size, h_sizes)
 
-    weights, J_train = train_network(train_X, train_labels, weights)
-    train_acc = test_network(train_X, train_labels, weights)
-    test_acc = test_network(test_X, test_labels, weights)
-    print("Training Accuracy:", train_acc)
+    weights, avg_j = train_network(train_X, train_labels, weights)
+    test_acc, confuse_mat = test_network(test_X, test_labels, weights)
+    plot_avg_j(avg_j)
+    plot_confuse(confuse_mat)
     print("Testing Accuracy:", test_acc)
-
-    # plot_j(J_train, "log_like_train2.png")
 
 
 if __name__ == "__main__":
