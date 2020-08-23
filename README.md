@@ -32,7 +32,7 @@ You will be prompted to give the number of layers, and the number of nodes for e
 
 ## Results
 
-The following network was used for this test:
+### Network
 
 - Input Layer: `64 nodes`
 - Hidden Layer: `32 nodes`
