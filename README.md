@@ -1,4 +1,4 @@
-# Artificial Neuron
+# Artificial Neural Network
 
 This is an artificial neural network built from scratch. It uses a sigmoid activation function on the input, hidden, and output layers. The gradient is computed by using the log likelihood function. It is used on the Yalefaces dataset and categorizes each face into 1 of 14 different classes.
 
